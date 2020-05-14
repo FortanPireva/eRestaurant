@@ -100,4 +100,34 @@ body {
       }
     }
   }
+  .form-container-custom {
+    margin: 20vh 0;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .login-form {
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: space-evenly;
+      background: white;
+      margin: 0 auto;
+      padding: 1rem;
+      margin: 1rem;
+      padding: 3rem;
+      border-radius: 10px;
+      h1 {
+        color: black;
+        font-size: 2rem;
+        margin: 0;
+      }
+
+      .register {
+        margin-top: 2rem;
+      }
+    }
+  }
 }

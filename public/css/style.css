@@ -122,4 +122,51 @@ body {
 #myStyle .menu-slideshow .menu-item .menu-title-price #menu_item_price {
   color: #baa774;
 }
+
+#myStyle .form-container-custom {
+  margin: 20vh 0;
+  height: 500px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#myStyle .form-container-custom .login-form {
+  width: 500px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  background: white;
+  margin: 0 auto;
+  padding: 1rem;
+  margin: 1rem;
+  padding: 3rem;
+  border-radius: 10px;
+}
+
+#myStyle .form-container-custom .login-form h1 {
+  color: black;
+  font-size: 2rem;
+  margin: 0;
+}
+
+#myStyle .form-container-custom .login-form .register {
+  margin-top: 2rem;
+}
 /*# sourceMappingURL=style.css.map */
