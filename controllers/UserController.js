@@ -5,6 +5,10 @@ exports.postLogin = (req, res, next) => {
 
   UserModel.findOne({ email }).then((user) => {
     if (user.password === password) {
+      if (user.isAdmin) {
+        res.redirect("/admin/");
+        return;
+      }
       res.render("user/index", {
         title: `Mirëserdhe ${user.fullName}`,
         fullName: user.fullName,

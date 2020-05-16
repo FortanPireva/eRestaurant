@@ -37,7 +37,7 @@ mongoose.connect(REMOTE_DB_URL, {
 
 app.use(publicRouter);
 app.use(userRouter);
-app.use(adminRouter);
+app.use("/admin", adminRouter);
 console.log(REMOTE_DB_URL);
 
 app.listen(PORT, () => {
