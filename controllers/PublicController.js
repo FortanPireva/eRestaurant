@@ -14,3 +14,9 @@ exports.getSignUp = (req, res, next) => {
 exports.getLogin = (req, res, next) => {
   res.render("public/login", { title: "Kyçja në Llogari" });
 };
+
+exports.getMenu = (req, res, next) => {
+  MenuModel.find({}).exec(function (err, products) {
+    return res.render("menu", { title: "Menyja e Plote", products: products });
+  });
+};

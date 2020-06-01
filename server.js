@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 const publicRouter = require("./routes/public");
 const userRouter = require("./routes/user");
 const adminRouter = require("./routes/admin");
+const publicApiRouter = require("./routes/api/public");
 //load .env key-value pairs in PROCESS.ENV object
 require("dotenv").config();
 // constants
@@ -38,6 +39,7 @@ mongoose.connect(REMOTE_DB_URL, {
 app.use(publicRouter);
 app.use(userRouter);
 app.use("/admin", adminRouter);
+app.use("/api", publicApiRouter);
 console.log(REMOTE_DB_URL);
 
 app.listen(PORT, () => {
