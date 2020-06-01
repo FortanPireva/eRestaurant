@@ -1,5 +1,10 @@
+const MenuModel = require("../models/MenuModel");
 exports.getIndex = (req, res, next) => {
-  res.render("index", { title: "Homepage" });
+  MenuModel.find({})
+    .limit(3)
+    .exec(function (err, products) {
+      return res.render("index", { title: "Homepage", products: products });
+    });
 };
 
 exports.getSignUp = (req, res, next) => {

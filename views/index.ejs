@@ -46,71 +46,30 @@
       </div>
     </div>
     <h1>Pjatat tona</h1>
-    <div class="menu-slideshow d-flex  flex-sm-row flex-column justify-content-center">
-      <div class="menu-item d-flex flex-column justify-content-center align-items center">
-        <div class="image">
-          <img src="https://www.bonappetour.com/blog/wp-content/uploads/2015/03/1426576690-7820792-1030x521.jpeg" 
-          
-            width="100%"
-            height="auto"
-          alt="">
-        </div>
+    <div class="menu-slideshow d-flex  flex-sm-row flex-column justify-content-between mx-2">
+      <% products.forEach(product=> { %> 
+      <div class="menu-item d-flex flex-column col-md-4 m-0 justify-content-center ">
+        <div class="image"><img src="<%= product.url %>"
+        
+        width="100%"
+        height="auto"
+        alt=""></div>
         <div class="menu-title-price d-flex justify-content-between">
-          <p id="menu_item_name">Dish1</p>
-          <p id="menu_item_price">$29.99</p>          
+          <p id="menu_item_name"><%=  product.name %></p>
+          <p id="menu_item_price">$<%= product.price %></p>          
         </div>
         <div>
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Adipisci aut sint culpa, consequatur autem perspiciatis sunt laborum sequi expedita dicta neque magnam, ad minus sed assumenda rem maxime repudiandae facere?</p>
+          <p><%= product.description %></p>
         </div>
         <div class="see-menu-button" class="orderBtn">
           <button>
             Porosit tani
           </button>
         </div>          
-        </div>
-        <div class="menu-item d-flex flex-column justify-content-center align-items center">
-          <div class="image">
-            <img src="https://www.bonappetour.com/blog/wp-content/uploads/2015/03/1426576690-7820792-1030x521.jpeg" 
-            
-              width="100%"
-              height="auto"
-            alt="">
-          </div>
-          <div class="menu-title-price d-flex justify-content-between">
-            <p id="menu_item_name">Dish1</p>
-            <p id="menu_item_price">$29.99</p>          
-          </div>
-          <div>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Adipisci aut sint culpa, consequatur autem perspiciatis sunt laborum sequi expedita dicta neque magnam, ad minus sed assumenda rem maxime repudiandae facere?</p>
-          </div>
-          <div class="see-menu-button" class="orderBtn">
-            <button>
-              Porosit tani
-            </button>
-          </div>          
-          </div>
-          <div class="menu-item d-flex  flex-column justify-content-center align-items center">
-            <div class="image">
-              <img src="https://www.bonappetour.com/blog/wp-content/uploads/2015/03/1426576690-7820792-1030x521.jpeg" 
-              
-                width="100%"
-                height="auto"
-              alt="">
-            </div>
-            <div class="menu-title-price d-flex justify-content-between">
-              <p id="menu_item_name">Dish1</p>
-              <p id="menu_item_price">$29.99</p>          
-            </div>
-            <div>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Adipisci aut sint culpa, consequatur autem perspiciatis sunt laborum sequi expedita dicta neque magnam, ad minus sed assumenda rem maxime repudiandae facere?</p>
-            </div>
-            <div class="see-menu-button" class="orderBtn">
-              <button>
-                Porosit tani
-              </button>
-            </div>          
-            </div>
       </div>
+      <% }) %>
+       
+      
     </div>
   </div>
 
