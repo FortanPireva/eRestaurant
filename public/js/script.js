@@ -1,4 +1,3 @@
-const URL = "http://localhost:3000";
 const card =
   localStorage.getItem("card") === null
     ? []
@@ -75,3 +74,27 @@ window.onclick = function (event) {
     modal.style.display = "none";
   }
 };
+
+
+//chati
+const socket = io();
+const messageContainer = document.getElementById('messageContainer');
+const messageForm = document.getElementById('send-container')
+console.log('messageForm');
+
+socket.on('chat-message',data=>{
+  appendMessage(data)
+})
+messageForm.addEventListener('submit', e=>{
+  console.log('fortn==');
+  
+  e.preventDefault();
+  const message = messageImput.value
+  socket.emit('send-chat-message', message)
+  messageImput.value = ''
+})
+function appendMessage(message){
+  const messageElement = document.createElement('div')
+  messageElement.innerText = message
+  messageContainer.append(messageElement)
+}

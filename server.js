@@ -5,6 +5,8 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const server = require('http').Server(app);
+
 
 //local requires
 const publicRouter = require("./routes/public");
@@ -42,6 +44,18 @@ app.use("/admin", adminRouter);
 app.use("/api", publicApiRouter);
 console.log(REMOTE_DB_URL);
 
-app.listen(PORT, () => {
-  console.log(`Server started listening on port ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server started listening  port ${PORT}`);
 });
+
+
+//chati
+const io = require('socket.io')(server)
+
+io.on('connection', socket =>{
+  console.log('new user');
+  socket.emit('chat-message','Hello world');
+  socket.on('send-chat-message', message =>{
+    socket.broadcast.emit('chat-message', message)
+  })
+})

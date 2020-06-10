@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/buttonChat.css">
   <script src="js/buttonChat.js"></script>
+  <script defer src="/socket.io/socket.io.js"></script>
+  <script src="js/script.js"></script>
 </head>
 
 <body>
@@ -13,14 +15,13 @@
   <button class="open-button" onclick="openForm()"><img src="https://img.icons8.com/wired/40/000000/online-support--v2.png" /></button>
 
   <div class="chat-popup" id="myForm">
-    <form action="https://www.w3schools.com/action_page.php" class="form-container">
-      <section class="real-time-chat">
+    <form  class="form-container" id="send-container">
+      <section class="real-time-chat" id="message-container">
         
       </section>
       <label for="msg"><b>Message</b></label>
-      <textarea placeholder="Type message.." name="msg" required></textarea>
-
-      <button type="submit" class="btn">Send</button>
+      <textarea placeholder="Type message.." name="msg" id="message-input" required></textarea>
+      <button type="submit" id="send-button" class="btn">Send</button>
       <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
     </form>
   </div>
