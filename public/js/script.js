@@ -1,4 +1,4 @@
-const URL = "http://localhost:3000";
+let URL = "http://localhost:3000";
 const card =
   localStorage.getItem("card") === ""
     ? []
@@ -79,47 +79,14 @@ window.onclick = function (event) {
   }
 };
 
-//chati
-const socket = io();
-const messageContainer = document.getElementById("message-container");
-const messageForm = document.getElementById("send-container");
-const messageImput = document.getElementById("message-input");
-console.log("messageForm", messageForm);
-
-socket.on("chat-message", (data) => {
-  appendMessage(data);
-});
-messageForm.addEventListener("keyup", function (e) {
-  if (e.keyCode == 13) {
-    e.preventDefault();
-    const message = messageImput.value;
-    appendMessage(message, true);
-    socket.emit("send-chat-message", message);
-    messageImput.value = "";
-  }
-});
-messageForm.addEventListener("submit", (e) => {
-  console.log("fortn==");
-
-  e.preventDefault();
-  const message = messageImput.value;
-  appendMessage(message, true);
-  socket.emit("send-chat-message", message);
-  messageImput.value = "";
-});
-function appendMessage(message, format = false) {
-  const messageElement = document.createElement("div");
-  messageElement.innerText = message;
-  if (format) {
-    messageElement.style.textAlign = "right";
-    messageElement.style.color = "blue";
-  }
-
-  messageContainer.append(messageElement);
-  messageContainer.scrollTo(0, messageContainer.scrollHeight + 10);
-}
 $("#form").submit(function (eventObj) {
-  $(this).append(`<input type="hidden" name="cart" value="${card}" /> `);
+  $(this).append(
+    `<input type="hidden" name="cart" value="${
+      localStorage.getItem("card") == null ? "" : localStorage.getItem("card")
+    }" /> `
+  );
+  console.log("ok");
+
   localStorage.setItem("card", []);
   return true;
 });

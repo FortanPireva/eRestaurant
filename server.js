@@ -70,4 +70,7 @@ io.on("connection", (socket) => {
   socket.on("send-chat-message", (message) => {
     socket.broadcast.emit("chat-message", message);
   });
+  socket.on("send-write", (message) => {
+    socket.broadcast.emit("send-write", message);
+  });
 });

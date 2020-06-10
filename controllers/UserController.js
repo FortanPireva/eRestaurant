@@ -3,10 +3,14 @@ const UserModel = require("../models/UserModel");
 const OrderModel = require("../models/OrderModel");
 const MenuModel = require("../models/MenuModel");
 const Mongoose = require("mongoose");
+const axios = require("axios");
+const MAIL_SERVER_ENDPOINT =
+  "https://mail-rrestorant.herokuapp.com/api/sendmail";
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   let cart = req.body.cart;
+  console.log(req.body, cart);
 
   UserModel.findOne({ email: email }).then((user) => {
     if (!user) {
@@ -158,17 +162,44 @@ exports.postOrder = (req, res, next) => {
           email: req.user.email,
           userId: req.user._id,
         },
-        products: products,
+        products: products.map((p) => {
+          return {
+            quantity: p.quantity,
+            product: {
+              title: p.product.name,
+              description: p.product.description,
+              price: p.product.price,
+              url: p.product.url,
+            },
+          };
+        }),
       });
       return order.save();
     })
     .then((result) => {
+      console.log(result);
+      return axios.post(MAIL_SERVER_ENDPOINT, {
+        method: "POST",
+        body: result,
+      });
+    })
+    .then((data) => {
+      // if (data == "true") {
+      //   return req.user.clearCart();
+      // } else {
+      //   throw new Error("Email not good");
+      // }
+      console.log(data);
       return req.user.clearCart();
     })
     .then(() => {
       res.redirect("/orderComplete");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+
+      res.redirect("/");
+    });
 };
 
 exports.getOrderComplete = (req, res, next) => {

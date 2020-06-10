@@ -3,7 +3,6 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="css/buttonChat.css" />
-    <script src="js/buttonChat.js"></script>
   </head>
 
   <body>
@@ -16,7 +15,8 @@
     <div class="chat-popup" id="myForm">
       <form class="form-container" id="send-container">
         <section class="real-time-chat" id="message-container"></section>
-        <label for="msg"><b>Message</b></label>
+        <input type="text" id="emri" placeholder="Shkruje emrin ton" />
+        <p id="personwrite"></p>
         <textarea
           placeholder="Type message.."
           name="msg"
