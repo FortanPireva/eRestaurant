@@ -14,6 +14,12 @@ module.exports.getIndex = (req, res, next) => {
   });
 };
 
+module.exports.postLogOut = (req, res, next) => {
+  req.session.destroy((err) => {
+    res.redirect("/");
+  });
+};
+
 module.exports.getAddMenu = (req, res, next) => {
   res.render("admin/add-menu", {
     title: "Add Menu",

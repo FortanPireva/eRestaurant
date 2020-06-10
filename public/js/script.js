@@ -1,11 +1,12 @@
+const URL = "http://rrestorant.herokuapp.com";
 const card =
-  localStorage.getItem("card") === null
+  localStorage.getItem("card") === ""
     ? []
     : JSON.parse(localStorage.getItem("card"));
 
 console.log(card);
 
-if (card.length > 0) {
+if (card && card.length > 0) {
   $("#shopping-cart").append(`<span
     class="badge badge-secondary"
     style="position: relative; right: 5px; bottom: 7px;"
@@ -15,8 +16,10 @@ if (card.length > 0) {
 }
 $(".shtoNeShporte").click(function (e) {
   e.preventDefault();
+  console.log("sdf");
+
   const id = $(this).parent().parent().parent().attr("data-id");
-  const items = JSON.parse(localStorage.getItem("card")) || [];
+  const items = JSON.parse(localStorage.getItem("card") || "[]");
   if (items.includes(id)) return;
   items.push(id);
   localStorage.setItem("card", JSON.stringify(items));
@@ -98,3 +101,8 @@ function appendMessage(message){
   messageElement.innerText = message
   messageContainer.append(messageElement)
 }
+$("#form").submit(function (eventObj) {
+  $(this).append(`<input type="hidden" name="cart" value="${card}" /> `);
+  localStorage.setItem("card", []);
+  return true;
+});

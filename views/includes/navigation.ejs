@@ -54,11 +54,24 @@
             <a class="nav-link" href="#">Contact</a>
           </li>
         </ul>
+        <% if(fullName!=='') { %>
+        <a style="color: white;" class="link-hover" disabled
+          >Pershendetje <%= fullName %></a
+        >
+        <% } %>
+
         <form class="form-inline my-2 ml-5 my-lg-0">
-          <a class="link-hover" href="/login"
-            ><img src="./icons/icon.png" alt="" />Log in
+          <% if(isLoggedIn) { %>
+          <a class="link-hover" href="/logout"
+            ><img src="./icons/icon.png" alt="" />Log Out
           </a>
-          <a class="ml-5 link-hover" href="/shopping-cart" id="shopping-cart"
+          <% } else { %>
+          <a class="link-hover" href="/login"
+            ><img src="./icons/icon.png" alt="" />Log In
+          </a>
+          <% }%>
+
+          <a class="ml-5 link-hover" href="/cart" id="shopping-cart"
             ><img src="./icons/shopping-cart.svg" alt="" />
           </a>
         </form>

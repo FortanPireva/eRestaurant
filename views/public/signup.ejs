@@ -1,9 +1,10 @@
 <%- include('../includes/header',{title:title}); %> <%-
-include('../includes/navigation'); %>
+include('../includes/navigation',{isLoggdIn:isLoggedIn,fullName:''}); %>
+
 <div class="form-container-custom">
   <div class="login-form">
     <h1>Regjistrohu</h1>
-    <form action="/signup" method="POST">
+    <form action="/signup" method="POST" id="form">
       <div class="form-group">
         <label for="name">Emri</label>
         <br />
@@ -79,4 +80,4 @@ include('../includes/navigation'); %>
   </div>
 </div>
 
-<%- include('../includes/footer'); %>
+<%- include('../includes/footer',{isLoggedIn:isLoggedIn}); %>

@@ -1,15 +1,18 @@
 const express = require("express");
 
 const adminRouter = express.Router();
+const auth = require("../middleware/auth");
 
 const adminController = require("../controllers/AdminController");
-adminRouter.get("/", adminController.getIndex);
-adminRouter.get("/add-menu", adminController.getAddMenu);
-adminRouter.post("/add-menu", adminController.postAddMenu);
-adminRouter.get("/menus", adminController.getMenus);
+adminRouter.get("/", auth, adminController.getIndex);
+adminRouter.get("/add-menu", auth, adminController.getAddMenu);
+adminRouter.post("/add-menu", auth, adminController.postAddMenu);
+adminRouter.get("/menus", auth, adminController.getMenus);
 
-adminRouter.get("/edit", adminController.getEditMenu);
-adminRouter.post("/edit", adminController.postEditMenu);
-adminRouter.post("/menu/delete", adminController.deleteMenu);
+adminRouter.get("/edit", auth, adminController.getEditMenu);
+adminRouter.post("/edit", auth, adminController.postEditMenu);
+adminRouter.post("/menu/delete", auth, adminController.deleteMenu);
+
+adminRouter.get("/logout", auth, adminController.postLogOut);
 
 module.exports = adminRouter;

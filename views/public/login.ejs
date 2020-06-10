@@ -1,9 +1,9 @@
 <%- include('../includes/header',{title:title}); %> <%-
-include('../includes/navigation'); %>
+include('../includes/navigation',{isLoggdIn:isLoggedIn,fullName:''}); %>
 <div class="form-container-custom">
   <div class="login-form">
     <h1>Kyçu në Llogari</h1>
-    <form action="/login" method="POST">
+    <form action="/login" method="POST" id="form">
       <div class="form-group">
         <label for="email">Email adresa</label>
         <br />
@@ -47,4 +47,4 @@ include('../includes/navigation'); %>
   </div>
 </div>
 
-<%- include('../includes/footer'); %>
+<%- include('../includes/footer',{isLoggedIn:isLoggedIn}); %>

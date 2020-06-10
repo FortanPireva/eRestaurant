@@ -5,9 +5,14 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+<<<<<<< HEAD
 const server = require('http').Server(app);
 
 
+=======
+const session = require("express-session");
+const MongoDbStore = require("connect-mongodb-session")(session);
+>>>>>>> ab4681e9fad082d696c0acbf423cc7be50985239
 //local requires
 const publicRouter = require("./routes/public");
 const userRouter = require("./routes/user");
@@ -27,6 +32,17 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname + "/public")));
+app.use(
+  session({
+    secret: "restaurant",
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoDbStore({
+      uri: REMOTE_DB_URL,
+      collection: "sessions",
+    }),
+  })
+);
 
 //extract data coming from HTML FORM POST in req.body object
 app.use(express.urlencoded({ extended: true }));

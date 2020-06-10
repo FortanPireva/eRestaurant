@@ -1,5 +1,5 @@
 <%- include('includes/header',{title:title}); %>
-<%- include('includes/navigation'); %>
+<%- include('includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
 
 <div
       class="entrance d-flex justify-content-center align-items-center flex-column"
@@ -62,15 +62,24 @@
           <p><%= product.description %></p>
         </div>
 
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between order">
           <div class="see-menu-button" class="orderBtn" >
-              <button class="shtoNeShporte">
-              Shto në Shportë
-            </button>
-          </div> 
+             
+            <% if(isLoggedIn) { %>
+              <form action="/shto" method="POST">
+                <input type="hidden" name="id" value="<%= product._id %>">
+                <button class="shtoNeShporte">Shto ne shporte</button>
+              </form>
+              <%  } else { %>
+                <button class="shtoNeShporte">
+                Shto në shportë
+              </button>
+                <% } %>
+      
+      </div> 
           <div class="see-menu-button" class="orderBtn">
             <button>
-              Porosit tani
+             <a href="<%= isLoggedIn ? '/shopping-cart' : '/login' %>">Porosit tani</a>
             </button>
           </div> 
         </div>       
@@ -83,5 +92,5 @@
 
 <%- include('includes/buttonChat'); %>
 
-<%- include('includes/footer'); %>
+<%- include('includes/footer',{isLoggedIn:isLoggedIn}); %>
  
