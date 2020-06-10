@@ -279,4 +279,8 @@ body {
   display: block;
   width: 70%;
 }
+
+#myStyle #message-container {
+  overflow-y: scroll;
+}
 /*# sourceMappingURL=style.css.map */

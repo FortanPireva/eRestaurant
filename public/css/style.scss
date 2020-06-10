@@ -217,6 +217,9 @@ body {
       width: 70%;
     }
   }
+  #message-container {
+    overflow-y: scroll;
+  }
 }
 
 // // Imports
