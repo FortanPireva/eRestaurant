@@ -269,4 +269,14 @@ body {
   color: black;
   text-decoration: none;
 }
+
+#myStyle .porosit {
+  width: 100%;
+}
+
+#myStyle .porosit button {
+  margin: 0 auto;
+  display: block;
+  width: 70%;
+}
 /*# sourceMappingURL=style.css.map */

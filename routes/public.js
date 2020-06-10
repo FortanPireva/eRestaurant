@@ -8,4 +8,6 @@ router.get("/login", publicController.getLogin);
 
 router.get("/signup", publicController.getSignUp);
 router.get("/menu", publicController.getMenu);
+
+router.get("*", publicController.get404);
 module.exports = router;

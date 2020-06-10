@@ -48,10 +48,11 @@ mongoose.connect(REMOTE_DB_URL, {
   useUnifiedTopology: true,
 });
 
-app.use(publicRouter);
 app.use(userRouter);
 app.use("/admin", adminRouter);
 app.use("/api", publicApiRouter);
+app.use(publicRouter);
+
 console.log(REMOTE_DB_URL);
 
 app.listen(PORT, () => {

@@ -27,7 +27,9 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
 
       <% }) %>
     </ul>
-    <button>Porosit</button>
+    <form action="/porosit" method="POST" class="porosit">
+      <button>Porosit</button>
+    </form>
   </div>
 </div>
 <%- include('../includes/buttonChat'); %> <%-

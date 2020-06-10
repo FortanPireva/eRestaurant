@@ -1,4 +1,4 @@
-const URL = "http://rrestorant.herokuapp.com";
+const URL = "http://localhost:3000";
 const card =
   localStorage.getItem("card") === ""
     ? []

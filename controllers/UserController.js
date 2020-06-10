@@ -103,6 +103,7 @@ exports.postSignUp = async (req, res, next) => {
       console.log(err);
     });
 };
+
 //test for contributor
 
 exports.getCart = (req, res, next) => {
@@ -151,10 +152,11 @@ exports.postOrder = (req, res, next) => {
       const products = user.cart.items.map((i) => {
         return { quantity: i.quantity, product: { ...i.productId._doc } };
       });
-      const order = new Order({
+      const order = new OrderModel({
         user: {
           name: req.user.fullName,
           email: req.user.email,
+          userId: req.user._id,
         },
         products: products,
       });
@@ -164,20 +166,15 @@ exports.postOrder = (req, res, next) => {
       return req.user.clearCart();
     })
     .then(() => {
-      res.redirect("/orders");
+      res.redirect("/orderComplete");
     })
     .catch((err) => console.log(err));
 };
 
-exports.getOrders = (req, res, next) => {
-  Order.find({ "user.userId": req.user._id })
-    .then((orders) => {
-      res.render("shop/orders", {
-        path: "/orders",
-        pageTitle: "Your Orders",
-        orders: orders,
-        isAuthenticated: req.session.isLoggedIn,
-      });
-    })
-    .catch((err) => console.log(err));
+exports.getOrderComplete = (req, res, next) => {
+  res.render("user/orderComplete", {
+    title: "Info rreth porosisë",
+    isLoggedIn: req.session.isLoggedIn,
+    fullName: req.session.fullName,
+  });
 };
