@@ -78,6 +78,29 @@ window.onclick = function (event) {
   }
 };
 
+
+//chati
+const socket = io();
+const messageContainer = document.getElementById('messageContainer');
+const messageForm = document.getElementById('send-container')
+console.log('messageForm');
+
+socket.on('chat-message',data=>{
+  appendMessage(data)
+})
+messageForm.addEventListener('submit', e=>{
+  console.log('fortn==');
+  
+  e.preventDefault();
+  const message = messageImput.value
+  socket.emit('send-chat-message', message)
+  messageImput.value = ''
+})
+function appendMessage(message){
+  const messageElement = document.createElement('div')
+  messageElement.innerText = message
+  messageContainer.append(messageElement)
+}
 $("#form").submit(function (eventObj) {
   $(this).append(`<input type="hidden" name="cart" value="${card}" /> `);
   localStorage.setItem("card", []);
