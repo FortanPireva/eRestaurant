@@ -79,6 +79,51 @@ window.onclick = function (event) {
   }
 };
 
+<<<<<<< HEAD
+=======
+//chati
+const socket = io();
+const messageContainer = document.getElementById("message-container");
+const messageForm = document.getElementById("send-container");
+const messageImput = document.getElementById("message-input");
+console.log("messageForm", messageForm);
+
+socket.on("chat-message", (data) => {
+  appendMessage(data);
+});
+messageForm.addEventListener("keyup", function (e) {
+  if (e.keyCode == 13) {
+    e.preventDefault();
+    const message = messageImput.value;
+    appendMessage(message, true);
+    socket.emit("send-chat-message", message);
+    messageImput.value = "";
+  }
+});
+messageForm.addEventListener("submit", (e) => {
+  console.log("fortn==");
+
+  e.preventDefault();
+  const message = messageImput.value;
+  appendMessage(message, true);
+  socket.emit("send-chat-message", message);
+  messageImput.value = "";
+});
+function appendMessage(message, format = false) {
+  const messageElement = document.createElement("div");
+  messageElement.innerText = message;
+  if (format) {
+    messageElement.style.textAlign = "right";
+    messageElement.style.color = "blue";
+  }
+
+  messageContainer.append(messageElement);
+  messageContainer.scrollTo(0, messageContainer.scrollHeight + 10);
+}
+
+
+
+>>>>>>> cc8e917bdedaacd3661cd0aae72b71300b0745ca
 $("#form").submit(function (eventObj) {
   $(this).append(
     `<input type="hidden" name="cart" value="${

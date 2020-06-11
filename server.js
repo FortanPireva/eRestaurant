@@ -74,3 +74,14 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("send-write", message);
   });
 });
+
+//video
+const cv = require('opencv4nodejs');
+
+const wCap = new cv.VideoCapture(0);
+
+setInterval(() => {
+  const frame = wCap.read();
+  const image = cv.imencode('.jpg', frame).toString('base64');
+  io.emit('image', 'some data');
+}, 1000)
