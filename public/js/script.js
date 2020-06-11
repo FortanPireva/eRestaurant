@@ -118,6 +118,9 @@ function appendMessage(message, format = false) {
   messageContainer.append(messageElement);
   messageContainer.scrollTo(0, messageContainer.scrollHeight + 10);
 }
+
+
+
 $("#form").submit(function (eventObj) {
   $(this).append(`<input type="hidden" name="cart" value="${card}" /> `);
   localStorage.setItem("card", []);
