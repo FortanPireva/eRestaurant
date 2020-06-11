@@ -79,8 +79,6 @@ window.onclick = function (event) {
   }
 };
 
-<<<<<<< HEAD
-=======
 //chati
 const socket = io();
 const messageContainer = document.getElementById("message-container");
@@ -121,9 +119,6 @@ function appendMessage(message, format = false) {
   messageContainer.scrollTo(0, messageContainer.scrollHeight + 10);
 }
 
-
-
->>>>>>> cc8e917bdedaacd3661cd0aae72b71300b0745ca
 $("#form").submit(function (eventObj) {
   $(this).append(
     `<input type="hidden" name="cart" value="${

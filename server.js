@@ -76,12 +76,13 @@ io.on("connection", (socket) => {
 });
 
 //video
-const cv = require('opencv4nodejs');
+const cv = require("opencv4nodejs");
 
 const wCap = new cv.VideoCapture(0);
 
+const FPS = 30;
 setInterval(() => {
   const frame = wCap.read();
-  const image = cv.imencode('.jpg', frame).toString('base64');
-  io.emit('image', 'some data');
-}, 1000)
+  const image = cv.imencode(".jpg", frame).toString("base64");
+  io.emit("image", image);
+}, 1000 / FPS);

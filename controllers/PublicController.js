@@ -53,6 +53,13 @@ exports.getMenu = (req, res, next) => {
   });
 };
 
+exports.getVideo = (req, res, next) => {
+  res.render("public/video", {
+    title: "404-Faqja nuk ekziston",
+    ...obj(req),
+  });
+};
+
 exports.get404 = (req, res, next) => {
   res.render("public/404", {
     title: "404-Faqja nuk ekziston",
