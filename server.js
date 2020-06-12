@@ -77,7 +77,7 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("send-write", message);
   });
 });
-const uids = [];
+let uids = [];
 
 io.of("/video").on("connection", (socket) => {
   const uid = UID();
@@ -100,6 +100,9 @@ io.of("/video").on("connection", (socket) => {
 });
 console.log("qity");
 
+setTimeout(() => {
+  uids = [];
+}, 60000);
 //video
 // const cv = require("opencv4nodejs");
 
