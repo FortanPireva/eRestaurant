@@ -1,6 +1,12 @@
 //chati
+let path = window.location.href;
+path = path.substring(
+  path.lastIndexOf("/"),
+  path.lastIndexOf("?") != -1 ? path.lastIndexOf("?") : path.length
+);
+console.log(path);
 
-if (["/", "/menu"].includes(window.location.href)) {
+if (["/", "/menu"].includes(path)) {
   const socket = io();
   const messageContainer = document.getElementById("message-container");
   const messageForm = document.getElementById("send-container");
@@ -13,6 +19,9 @@ if (["/", "/menu"].includes(window.location.href)) {
   socket.on("send-write", (data) => {
     personWrites.innerText = "";
     personWrites.innerHTML = `<i>${data}</i>`;
+  });
+  socket.on("chat-message", (data) => {
+    appendMessage(data);
   });
   messageImput.addEventListener("keyup", function (e) {
     if (e.keyCode == 13) {

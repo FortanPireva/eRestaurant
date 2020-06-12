@@ -57,6 +57,21 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
               context.height
             );
 
+            var recordedChunks = [];
+
+            var options = { mimeType: "video/webm;codecs=vp9" };
+            mediaRecorder = new MediaRecorder(stream, options);
+            mediaRecorder.ondataavailable = handleDataAvailable;
+            mediaRecorder.start();
+
+            function handleDataAvailable(event) {
+              if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+              } else {
+                // ...
+              }
+            }
+
             socket.emit("image-upload", canvas.toDataURL("image/webp"));
           }, FPS);
         },
