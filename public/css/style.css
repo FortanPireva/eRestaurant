@@ -222,6 +222,30 @@ body {
   margin-top: 2rem;
 }
 
+#myStyle .showVideoDiv {
+  width: 100%;
+  color: white;
+  background-color: black;
+  position: fixed;
+  height: 70px;
+  font-size: 1rem;
+  z-index: 5;
+  bottom: 0;
+  visibility: hidden;
+}
+
+#myStyle .showVideoDiv a {
+  color: #baa774;
+}
+
+#myStyle .showVideoDiv * {
+  margin: 10px;
+}
+
+#myStyle .showVideoDiv #remove {
+  cursor: pointer;
+}
+
 #myStyle footer {
   margin-top: 5vh;
   background-color: #25282f;

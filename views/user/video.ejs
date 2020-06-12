@@ -1,0 +1,94 @@
+<%- include('../includes/header',{title:title}); %> <%-
+include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
+<style>
+  .container {
+    color: white;
+  }
+
+  .col {
+    margin: 5px;
+  }
+</style>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-4">
+      <canvas class="chat-video" id="self-cam"></canvas>
+      <video
+        playsinline
+        autoplay
+        class="chat-video d-none"
+        id="chat-video-src"
+      ></video>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const PING_INTERVAL = 10000;
+  const FPS = 1000 / 60; // 30fps
+  let videoRecording = false;
+
+  const loadSelfCam = () => {
+    if (videoRecording) return;
+    const canvas = document.getElementById("self-cam");
+    const context = canvas.getContext("2d");
+
+    context.height = canvas.height;
+    context.width = canvas.width;
+
+    navigator.getUserMedia =
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia ||
+      navigator.msgGetUserMedia;
+    if (navigator.getUserMedia) {
+      navigator.getUserMedia(
+        { video: true, audio: true },
+        (stream) => {
+          videoRecording = true;
+          document.getElementById("chat-video-src").srcObject = stream;
+          setInterval(() => {
+            context.drawImage(
+              document.getElementById("chat-video-src"),
+              0,
+              0,
+              context.width,
+              context.height
+            );
+
+            socket.emit("image-upload", canvas.toDataURL("image/webp"));
+          }, FPS);
+        },
+        (err) => console.error(err)
+      );
+    }
+  };
+
+  loadSelfCam();
+  const socket = io("/video");
+  socket.on("new-user", (data) => {
+    console.log("hello", data);
+
+    $(".row").append(`
+    <div class="col-sm-12 col-md-6 col-lg-4">
+      <img  alt="ok" id="img-${data}"/>
+    </div>`);
+  });
+  socket.on("video", ({ uid, img }) => {
+    console.log($(`img-${uid}`).attr("src"));
+    if (document.getElementById(`img-${uid}`) !== null)
+      document.getElementById(`img-${uid}`).setAttribute("src", img);
+    console.log("hello", img);
+  });
+  socket.on("hello", (uids) => {
+    console.log(uids);
+    if (uids.length == 0) return;
+    uids.forEach((uid) => {
+      $(".row").append(`
+    <div class="col-sm-12 col-md-6 col-lg-4">
+      <img  alt="ok" id="img-${uid}"/>
+    </div>`);
+    });
+  });
+</script>

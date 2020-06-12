@@ -171,6 +171,27 @@ body {
       }
     }
   }
+  .showVideoDiv {
+    width: 100%;
+    color: white;
+    background-color: black;
+    position: fixed;
+    height: 70px;
+    font-size: 1rem;
+    z-index: 5;
+    bottom: 0;
+    visibility: hidden;
+    a {
+      color: $link-color;
+    }
+    * {
+      margin: 10px;
+    }
+    #remove {
+      cursor: pointer;
+    }
+  }
+
   footer {
     margin-top: 5vh;
     background-color: #25282f;

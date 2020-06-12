@@ -14,6 +14,8 @@ const publicRouter = require("./routes/public");
 const userRouter = require("./routes/user");
 const adminRouter = require("./routes/admin");
 const publicApiRouter = require("./routes/api/public");
+const { log } = require("console");
+const UID = require("uuid").v4;
 //load .env key-value pairs in PROCESS.ENV object
 require("dotenv").config();
 // constants
@@ -75,15 +77,37 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("send-write", message);
   });
 });
+const uids = [];
+
+io.of("/video").on("connection", (socket) => {
+  const uid = UID();
+
+  uids.push(uid);
+  socket.emit(
+    "hello",
+    uids.filter((u) => u !== uid)
+  );
+  console.log("new video user", uid);
+
+  socket.broadcast.emit("new-user", uid);
+
+  socket.on("image-upload", (message) => {
+    socket.broadcast.emit("video", {
+      uid: uid,
+      img: message,
+    });
+  });
+});
+console.log("qity");
 
 //video
-const cv = require("opencv4nodejs");
+// const cv = require("opencv4nodejs");
 
-const wCap = new cv.VideoCapture(0);
+// const wCap = new cv.VideoCapture(0);
 
-const FPS = 30;
-setInterval(() => {
-  const frame = wCap.read();
-  const image = cv.imencode(".jpg", frame).toString("base64");
-  io.emit("image", image);
-}, 1000 / FPS);
+// const FPS = 30;
+// setInterval(() => {
+//   const frame = wCap.read();
+//   const image = cv.imencode(".jpg", frame).toString("base64");
+//   io.emit("image", image);
+// }, 1000 / FPS);

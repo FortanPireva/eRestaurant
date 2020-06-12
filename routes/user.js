@@ -13,4 +13,5 @@ userRouter.post("/shto", auth, UserController.postCart);
 userRouter.get("/cart", auth, UserController.getCart);
 userRouter.post("/porosit", auth, UserController.postOrder);
 userRouter.get("/orderComplete", UserController.getOrderComplete);
+userRouter.get("/video", UserController.getVideo);
 module.exports = userRouter;

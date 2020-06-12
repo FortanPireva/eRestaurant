@@ -209,3 +209,11 @@ exports.getOrderComplete = (req, res, next) => {
     fullName: req.session.fullName,
   });
 };
+
+exports.getVideo = (req, res, next) => {
+  res.render("user/video", {
+    title: "Video Sesioni",
+    isLoggedIn: req.session.isLoggedIn,
+    fullName: req.session.fullName,
+  });
+};
