@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+  </head>
 
-<body>
-
-    <img id='image'>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <body>
+    <img id="image" />
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io.connect('http://localhost:3000');
-        socket.on('image', (image) => {
-            const imageElm = document.getElementById('image');
-            imageElm.src = `data:image/jpeg;base64, ${image}`;
-        });
+      const socket = io();
+      socket.on("image", (image) => {
+        const imageElm = document.getElementById("image");
+        imageElm.src = `data:image/jpeg;base64, ${image}`;
+      });
     </script>
-
-    <h1>hallllllllllllllllllllllllll</h1>
-
-</body>
-
+  </body>
 </html>

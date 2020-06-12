@@ -4,7 +4,7 @@ const messageContainer = document.getElementById("message-container");
 const messageForm = document.getElementById("send-container");
 const messageImput = document.getElementById("message-input");
 const emri = document.getElementById("emri");
-const personWrites = document.getElementById("personWrite");
+const personWrites = document.getElementById("personwrite");
 
 console.log("messageForm", messageForm);
 
@@ -14,7 +14,7 @@ socket.on("chat-message", (data) => {
 
 socket.on("send-write", (data) => {
   personWrites.innerText = "";
-  personWrites.innerText = data;
+  personWrites.innerHTML = `<i>${data}</i>`;
 });
 messageImput.addEventListener("keyup", function (e) {
   if (e.keyCode == 13) {
