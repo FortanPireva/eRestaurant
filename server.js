@@ -87,6 +87,7 @@ io.of("/video").on("connection", (socket) => {
     "hello",
     uids.filter((u) => u !== uid)
   );
+
   console.log("new video user", uid);
 
   socket.broadcast.emit("new-user", uid);
@@ -96,6 +97,19 @@ io.of("/video").on("connection", (socket) => {
       uid: uid,
       img: message,
     });
+  });
+  socket.on("disconnect", (message) => {
+    uids = uids.filter((u) => u !== uid);
+    console.log(message);
+    console.log(uid);
+
+    socket.broadcast.emit("client-disconnect", uid);
+  });
+
+  socket.on("audio-upload", (message) => {
+    console.log(message);
+
+    socket.broadcast.emit("audio", message);
   });
 });
 console.log("qity");

@@ -8,6 +8,18 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
   .col {
     margin: 5px;
   }
+  .buttons {
+    background-color: rgb(148, 141, 141);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  .btn-round {
+    border-radius: 50%;
+    padding: 20px;
+    margin: 5px;
+    background-color: #a04848;
+  }
 </style>
 <div class="container">
   <div class="row">
@@ -22,17 +34,40 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
     </div>
   </div>
 </div>
+<audio
+  controls="controls"
+  src=""
+  style="visibility: hidden;"
+  autoplay
+  id="audio"
+  type="audio/wav "
+></audio>
+<div class="buttons d-flex justify-content-center">
+  <button class="btn-round" id="mic">
+    <i class="fa fa-microphone" aria-hidden="true"></i>
+  </button>
+  <button class="btn-round" id="phone">
+    <i class="fa fa-phone" aria-hidden="true"></i>
+  </button>
+  <button class="btn-round" id="cam">
+    <i class="fa fa-video-camera" aria-hidden="true"></i>
+  </button>
+</div>
 
+<script src="https://www.WebRTC-Experiment.com/RecordRTC.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const PING_INTERVAL = 10000;
   const FPS = 1000 / 60; // 30fps
   let videoRecording = false;
-
+  let audioRecording = false;
+  const cam = document.getElementById("cam");
+  const phone = document.getElementById("phone");
+  const mic = document.getElementById("mic");
+  const canvas = document.getElementById("self-cam");
+  const context = canvas.getContext("2d");
   const loadSelfCam = () => {
     if (videoRecording) return;
-    const canvas = document.getElementById("self-cam");
-    const context = canvas.getContext("2d");
 
     context.height = canvas.height;
     context.width = canvas.width;
@@ -44,35 +79,26 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
       navigator.msgGetUserMedia;
     if (navigator.getUserMedia) {
       navigator.getUserMedia(
-        { video: true, audio: true },
+        { video: true },
         (stream) => {
           videoRecording = true;
           document.getElementById("chat-video-src").srcObject = stream;
           setInterval(() => {
-            context.drawImage(
-              document.getElementById("chat-video-src"),
-              0,
-              0,
-              context.width,
-              context.height
-            );
-
-            var recordedChunks = [];
-
-            var options = { mimeType: "video/webm;codecs=vp9" };
-            mediaRecorder = new MediaRecorder(stream, options);
-            mediaRecorder.ondataavailable = handleDataAvailable;
-            mediaRecorder.start();
-
-            function handleDataAvailable(event) {
-              if (event.data.size > 0) {
-                recordedChunks.push(event.data);
-              } else {
-                // ...
-              }
+            if (document.getElementById("chat-video-src").srcObject !== null) {
+              context.drawImage(
+                document.getElementById("chat-video-src"),
+                0,
+                0,
+                context.width,
+                context.height
+              );
             }
 
-            socket.emit("image-upload", canvas.toDataURL("image/webp"));
+            try {
+              socket.emit("image-upload", canvas.toDataURL("image/webp"));
+            } catch (e) {
+              console.log(e);
+            }
           }, FPS);
         },
         (err) => console.error(err)
@@ -80,7 +106,88 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
     }
   };
 
-  loadSelfCam();
+  function stopStreamedVideo(videoElem) {
+    const stream = videoElem.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(function (track) {
+      track.stop();
+    });
+
+    videoElem.srcObject = null;
+    const img = document.createElement("img");
+    img.setAttribute(
+      "src",
+      "https://eu.ui-avatars.com/api/?length=1&size=128&name=<%= fullName %>"
+    );
+
+    document.children[0].appendChild(img);
+
+    context.drawImage(img, 0, 0, context.width, context.height);
+    document.children[0].removeChild(img);
+  }
+  cam.addEventListener("click", function (e) {
+    if (!videoRecording) {
+      this.style.backgroundColor = "white";
+      loadSelfCam();
+    } else {
+      this.style.backgroundColor = "#a04848";
+      videoRecording = false;
+      stopStreamedVideo(document.getElementById("chat-video-src"));
+    }
+  });
+  mic.addEventListener("click", function (e) {
+    let recordAudio = "";
+    if (!audioRecording) {
+      this.style.backgroundColor = "white";
+      navigator.getUserMedia(
+        {
+          audio: true,
+        },
+        function (stream) {
+          audioRecording = true;
+          recordAudio = RecordRTC(stream, {
+            type: "audio",
+            mimeType: "audio/webm",
+            sampleRate: 44100,
+            desiredSampRate: 16000,
+
+            recorderType: StereoAudioRecorder,
+            numberOfAudioChannels: 1,
+
+            //1)
+            // get intervals based blobs
+            // value in milliseconds
+            // as you might not want to make detect calls every seconds
+            timeSlice: 1000,
+
+            //2)
+            // as soon as the stream is available
+            ondataavailable: function (blob) {
+              // 3
+              // making use of socket.io-stream for bi-directional
+              // streaming, create a stream
+              // stream directly to server
+              // it will be temp. stored locally
+              socket.emit("audio-upload", URL.createObjectURL(blob));
+            },
+          });
+
+          recordAudio.startRecording();
+        },
+        function (error) {
+          console.error(JSON.stringify(error));
+        }
+      );
+    } else {
+      console.log(recordAudio + " asdf");
+
+      this.style.backgroundColor = "#a04848";
+      audioRecording = false;
+      document.getElementById("audio").srcObject = null;
+    }
+  });
+
   const socket = io("/video");
   socket.on("new-user", (data) => {
     console.log("hello", data);
@@ -91,10 +198,18 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
     </div>`);
   });
   socket.on("video", ({ uid, img }) => {
-    console.log($(`img-${uid}`).attr("src"));
     if (document.getElementById(`img-${uid}`) !== null)
       document.getElementById(`img-${uid}`).setAttribute("src", img);
-    console.log("hello", img);
+  });
+
+  socket.on("client-disconnect", (uid) => {
+    console.log($(`img-${uid}`).parent());
+    document
+      .getElementById(`img-${uid}`)
+      .parentNode.parentNode.removeChild(
+        document.getElementById(`img-${uid}`).parentNode
+      );
+    console.log(uid);
   });
   socket.on("hello", (uids) => {
     console.log(uids);
@@ -105,5 +220,9 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
       <img  alt="ok" id="img-${uid}"/>
     </div>`);
     });
+  });
+
+  socket.on("audio", (message) => {
+    document.getElementById("audio").setAttribute("src", message);
   });
 </script>
