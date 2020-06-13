@@ -83,7 +83,7 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
         (stream) => {
           videoRecording = true;
           document.getElementById("chat-video-src").srcObject = stream;
-          setInterval(() => {
+          interval = setInterval(() => {
             if (document.getElementById("chat-video-src").srcObject !== null) {
               context.drawImage(
                 document.getElementById("chat-video-src"),
@@ -115,16 +115,9 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
     });
 
     videoElem.srcObject = null;
-    const img = document.createElement("img");
-    img.setAttribute(
-      "src",
-      "https://eu.ui-avatars.com/api/?length=1&size=128&name=<%= fullName %>"
-    );
+    console.log(interval);
 
-    document.children[0].appendChild(img);
-
-    context.drawImage(img, 0, 0, context.width, context.height);
-    document.children[0].removeChild(img);
+    clearInterval(interval);
   }
   cam.addEventListener("click", function (e) {
     if (!videoRecording) {
@@ -134,6 +127,8 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
       this.style.backgroundColor = "#a04848";
       videoRecording = false;
       stopStreamedVideo(document.getElementById("chat-video-src"));
+
+      socket.emit("no-video-upload", "<%= fullName %>");
     }
   });
   mic.addEventListener("click", function (e) {
@@ -169,7 +164,7 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
               // streaming, create a stream
               // stream directly to server
               // it will be temp. stored locally
-              socket.emit("audio-upload", URL.createObjectURL(blob));
+              socket.emit("audio-upload", blob);
             },
           });
 
@@ -180,8 +175,6 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
         }
       );
     } else {
-      console.log(recordAudio + " asdf");
-
       this.style.backgroundColor = "#a04848";
       audioRecording = false;
       document.getElementById("audio").srcObject = null;
@@ -189,9 +182,15 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
   });
 
   const socket = io("/video");
-  socket.on("new-user", (data) => {
-    console.log("hello", data);
 
+  socket.emit("hi", "<%= fullName %>");
+
+  socket.on("hi", ({ uid, letter }) => {
+    document.getElementById(
+      `img-${uid}`
+    ).src = `https://eu.ui-avatars.com/api/?length=1&size=200&name=${letter}`;
+  });
+  socket.on("new-user", (data) => {
     $(".row").append(`
     <div class="col-sm-12 col-md-6 col-lg-4">
       <img  alt="ok" id="img-${data}"/>
@@ -200,6 +199,15 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
   socket.on("video", ({ uid, img }) => {
     if (document.getElementById(`img-${uid}`) !== null)
       document.getElementById(`img-${uid}`).setAttribute("src", img);
+  });
+
+  socket.on("no-video-upload", ({ uid, letter }) => {
+    console.log(letter);
+
+    document.getElementById(
+      `img-${uid}`
+    ).src = `https://eu.ui-avatars.com/api/?length=1&size=200&name=${letter}`;
+    console.log(document.getElementById(`img-${uid}`));
   });
 
   socket.on("client-disconnect", (uid) => {
@@ -222,7 +230,9 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
     });
   });
 
-  socket.on("audio", (message) => {
-    document.getElementById("audio").setAttribute("src", message);
+  socket.on("audio", (blob) => {
+    document
+      .getElementById("audio")
+      .setAttribute("src", URL.createObjectURL(blob));
   });
 </script>

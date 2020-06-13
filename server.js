@@ -92,6 +92,10 @@ io.of("/video").on("connection", (socket) => {
 
   socket.broadcast.emit("new-user", uid);
 
+  socket.on("hi", (name) => {
+    socket.broadcast.emit("hi", { uid: uid, letter: name.slice(0, 1) });
+  });
+
   socket.on("image-upload", (message) => {
     socket.broadcast.emit("video", {
       uid: uid,
@@ -110,6 +114,16 @@ io.of("/video").on("connection", (socket) => {
     console.log(message);
 
     socket.broadcast.emit("audio", message);
+  });
+
+  socket.on("no-video-upload", (message) => {
+    const letter = message.slice(0, 1);
+    console.log(letter);
+
+    socket.broadcast.emit("no-video-upload", {
+      uid: uid,
+      letter: letter,
+    });
   });
 });
 console.log("qity");
