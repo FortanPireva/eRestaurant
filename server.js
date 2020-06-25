@@ -111,6 +111,8 @@ io.of("/video").on("connection", (socket) => {
   });
 
   socket.on("audio-upload", (message) => {
+    console.log('audio-upload');
+    
     console.log(message);
 
     socket.broadcast.emit("audio", message);
@@ -126,7 +128,6 @@ io.of("/video").on("connection", (socket) => {
     });
   });
 });
-console.log("qity");
 
 setTimeout(() => {
   uids = [];
