@@ -35,7 +35,7 @@ include('../includes/navigation',{isLoggedIn:isLoggedIn,fullName:fullName}); %>
   </div>
 </div>
 <audio
-style="visibility: hidden;"
+  style="visibility: hidden"
   controls="controls"
   src=""
   id="audio"
@@ -52,9 +52,11 @@ style="visibility: hidden;"
     <i class="fa fa-video-camera" aria-hidden="true"></i>
   </button>
 </div>
-
+<%- include('../includes/buttonChat'); %>
+<script src="./js/buttonChat.js"></script>
+<script src="./js/chat.js"></script>
 <script src="https://www.WebRTC-Experiment.com/RecordRTC.js"></script>
-<script src="/socket.io/socket.io.js"></script>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
 <script>
   const PING_INTERVAL = 10000;
   const FPS = 1000 / 60; // 30fps
@@ -64,6 +66,8 @@ style="visibility: hidden;"
   const phone = document.getElementById("phone");
   const mic = document.getElementById("mic");
   const canvas = document.getElementById("self-cam");
+  canvas.width = 400;
+  canvas.height = 400;
   const context = canvas.getContext("2d");
   let mediaRecorder;
   const loadSelfCam = () => {
@@ -132,17 +136,20 @@ style="visibility: hidden;"
     }
   });
   //**blob to dataURL**
-function blobToDataURL(blob) {
+  function blobToDataURL(blob) {
     var a = new FileReader();
 
-  a.addEventListener("load", function () {
-    // convert image file to base64 string
-    socket.emit('audio-upload',a.result);
-
-  }, false);
+    a.addEventListener(
+      "load",
+      function () {
+        // convert image file to base64 string
+        socket.emit("audio-upload", a.result);
+      },
+      false
+    );
 
     a.readAsDataURL(blob);
-}
+  }
   mic.addEventListener("click", function (e) {
     if (!audioRecording) {
       this.style.backgroundColor = "white";
@@ -152,25 +159,23 @@ function blobToDataURL(blob) {
         },
         function (stream) {
           audioRecording = true;
-           mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder = new MediaRecorder(stream);
 
           mediaRecorder.start();
           let chunks = [];
 
-          mediaRecorder.ondataavailable = function(e) {
+          mediaRecorder.ondataavailable = function (e) {
             chunks.push(e.data);
-          }
-          mediaRecorder.onstop = function(e) {
-              console.log("recorder stopped");
+          };
+          mediaRecorder.onstop = function (e) {
+            console.log("recorder stopped");
 
-              const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
-              chunks = [];
-              const audioURL = window.URL.createObjectURL(blob);
-              audio.src = audioURL;
-blobToDataURL(blob);
-            }
-     
-          
+            const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+            chunks = [];
+            const audioURL = window.URL.createObjectURL(blob);
+            audio.src = audioURL;
+            blobToDataURL(blob);
+          };
         },
         function (error) {
           console.error(JSON.stringify(error));
@@ -182,7 +187,6 @@ blobToDataURL(blob);
       audioRecording = false;
       document.getElementById("audio").srcObject = null;
     }
-    
   });
 
   const socket = io("/video");
@@ -236,10 +240,8 @@ blobToDataURL(blob);
 
   socket.on("audio", (blob) => {
     console.log(blob);
-    
-    document
-      .getElementById("audio")
-      .setAttribute("src", blob);
-      document.getElementById("audio").play();
+
+    document.getElementById("audio").setAttribute("src", blob);
+    document.getElementById("audio").play();
   });
 </script>
